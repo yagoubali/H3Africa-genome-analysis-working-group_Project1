@@ -21,3 +21,9 @@
 
 bwa index -a bwtsw  GCA_009914755.4_T2T-CHM13v2.0_genomic.fna
 ```
+
+## 3. bwa mem mapping
+
+```bash
+./T2T_submit.sh
+```
