@@ -15,6 +15,9 @@
 
 ```bash
 # index locally then copy it to ilifu
-# Here I use T2T RefSeq
-bwa index GCA_009914755.4_T2T-CHM13v2.0_genomic.fna
+# Here I use T2T GenBank because it includes Mitochondria genome
+## ---> -a bwtsw	Algorithm implemented in BWT-SW. This method works with the whole human genome.
+## ---> -a is	IS linear-time algorithm for constructing suffix array. It requires 5.37N memory where N is the size of the database. IS is moderately fast, but does not work with database larger than 2GB.
+
+bwa index -a bwtsw  GCA_009914755.4_T2T-CHM13v2.0_genomic.fna
 ```
