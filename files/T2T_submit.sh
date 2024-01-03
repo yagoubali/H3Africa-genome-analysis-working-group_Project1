@@ -6,7 +6,7 @@ SUBMISSION_LOG=$(date '+%Y-%m-%d')
 
 
 userId="yagoubali"
-baylor="/users/${userId}/H3A-Baylor_sample_list.txt"	
+baylor="/users/${userId}/H3A-Baylor_sample_list2.txt"	# only 10 samples
 cram_ids=($(cat ${baylor} | tr \\n " "))
 
 mkdir -p ${RESULT}
