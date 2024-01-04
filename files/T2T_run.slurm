@@ -7,7 +7,7 @@
 #SBATCH --export=ALL
 
 
-module load samtools/1.18
+module load samtools/1.19
 module load bwa/github
 
 userId="yagoubali"
