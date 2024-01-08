@@ -15,6 +15,6 @@ for cram_id in ${cram_ids[*]}; do
     mkdir -p /scratch3/users/${userId}/${cram_id}   
 	sbatch --job-name=${cram_id} \
 	       	       --output=/scratch3/users/${userId}/${cram_id}/${cram_id}_slurm_%j.out \
-	      	        /users/${userId}/T2T_run.slurm ${cram_id}
+	      	        /users/${userId}/T2T_run_defaultK.slurm ${cram_id}
 	echo "${cram_id} submitted" >> ${RESULT}/Jobs_${SUBMISSION_LOG}.txt
 done 
