@@ -49,7 +49,6 @@ samtools sort -o ${scratch_dir}/${SAMPLE}.sorted.bam ${scratch_dir}/${SAMPLE}.ba
 samtools flagstat ${scratch_dir}/${SAMPLE}.sorted.bam  > ${scratch_dir}/${SAMPLE}.flagstat
 
 
-
 cp ${scratch_dir}/${SAMPLE}.md.recal.cram.flagstat ${RESULT}/
 cp ${scratch_dir}/${SAMPLE}.flagstat   ${RESULT}/
 cp ${scratch_dir}/${SAMPLE}.sorted.bam*   ${RESULT}/
