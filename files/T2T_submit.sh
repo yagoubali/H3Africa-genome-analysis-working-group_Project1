@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 
-RESULT="/scratch3/users/yagoubali/project1"
+RESULT="/scratch3/users/yagoubali/project1_Y"
+outdir="/cbio/users/${userId}" 
 #SUCCEED_RUN=$(cat ${RESULT}/succeed_run.txt)
 SUBMISSION_LOG=$(date '+%Y-%m-%d')
 
@@ -10,6 +11,7 @@ baylor="/users/${userId}/H3A-Baylor_sample_list2.txt"	# only 10 samples
 cram_ids=($(cat ${baylor} | tr \\n " "))
 
 mkdir -p ${RESULT}
+mkdir -p ${outdir}/project1_Y
 ###
 for cram_id in ${cram_ids[*]}; do 
     echo "Submitting Job ${cram_id}"
