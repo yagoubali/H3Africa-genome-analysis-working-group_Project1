@@ -22,5 +22,5 @@
 bwa index -a bwtsw  GCA_009914755.4_T2T-CHM13v2.0_genomic.fna
 ```
 
-## [3. bwa mem mapping](stage1:convert_carm_T2T_mapping/README.md)
+## [3. bwa mem mapping]("stage1:convert_carm_T2T_mapping/README.md")
 
