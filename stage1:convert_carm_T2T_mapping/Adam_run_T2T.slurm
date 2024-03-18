@@ -11,17 +11,29 @@ module load samtools/1.19
 module load bwa/github
 
 userId="yagoubali"
-user_dir1="/cbio/users/${userId}/project1_all_samples/mapping_test" 
-scratch_dir="/scratch3/users/${userId}/project1_all_samples"
-data_dir="/cbio/datasets/human/baylor/b38/cram"
+subfolder="adam"
+
+
+
+
+PROJECT="/cbio/projects/022"
+DATA_DIR="/cbio/datasets/human/baylor/b38/cram"
 REF_GENOME_hg38="/cbio/dbs/references/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa"
-REF_GENOME_T2T="/cbio/users/yagoubali/datasets/human/T2T/GenBank/GCA_009914755.4_T2T-CHM13v2.0_genomic.fna"
-copy_orginal_flagstat="/cbio/users/${userId}/project1_all_samples/orginal_flagstat"
+REF_GENOME_T2T="/cbio/projects/022/adam/datasets/dbs/references/T2T/GCA_009914755.4/GCA_009914755.4_T2T-CHM13v2.0_genomic.fna"
+copy_orginal_flagstat="${PROJECT}/${subfolder}/project1_all_samples/orginal_flagstat"
 SAMPLE=$1
+
+
+
+outdir_T2T="${PROJECT}/${subfolder}/project1_all_samples/mapping/T2T" 
+outdir_hg38="${PROJECT}/${subfolder}/project1_all_samples/mapping/hg38" 
+scratch_dir="/scratch3/users/${userId}/project1_all_samples"
+
+
 
 ## Copy cram files
 
-cram_file="${data_dir}/${SAMPLE}/${SAMPLE}.md.recal.cram"
+cram_file="${DATA_DIR}/${SAMPLE}/${SAMPLE}.md.recal.cram"
 cp ${cram_file}* ${scratch_dir}/
 
 ## Convert cram files to fastq: 1. with collate 2. without collate
@@ -86,8 +98,8 @@ samtools view  -@ 32  -S -b ${scratch_dir}/${SAMPLE}_wCollate.sam > ${scratch_di
 samtools sort -@ 32  -o ${scratch_dir}/${SAMPLE}_wCollate.sorted.bam ${scratch_dir}/${SAMPLE}_wCollate.bam
 samtools flagstat -@ 32  ${scratch_dir}/${SAMPLE}_wCollate.sorted.bam  > ${scratch_dir}/${SAMPLE}_wCollate.flagstat
 
-cp ${scratch_dir}/${SAMPLE}_wCollate.sorted.bam* ${user_dir1}/
-cp ${scratch_dir}/${SAMPLE}_wCollate.flagstat ${user_dir1}/
+cp ${scratch_dir}/${SAMPLE}_wCollate.sorted.bam* ${outdir_T2T}/
+cp ${scratch_dir}/${SAMPLE}_wCollate.flagstat ${outdir_T2T}/
 rm ${scratch_dir}/${SAMPLE}_wCollate.sam 
 rm ${scratch_dir}/${SAMPLE}_wCollate.bam
 rm ${scratch_dir}/${SAMPLE}_wCollate.sorted.bam* 
@@ -109,8 +121,8 @@ samtools view  -@ 32  -S -b ${scratch_dir}/${SAMPLE}_wCollate_hg38.sam > ${scrat
 samtools sort -@ 32  -o ${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam ${scratch_dir}/${SAMPLE}_wCollate_hg38.bam
 samtools flagstat -@ 32  ${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam  > ${scratch_dir}/${SAMPLE}_wCollate_hg38.flagstat
 
-cp ${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam* ${user_dir1}/
-cp ${scratch_dir}/${SAMPLE}_wCollate_hg38.flagstat ${user_dir1}/
+cp ${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam* ${outdir_hg38}/
+cp ${scratch_dir}/${SAMPLE}_wCollate_hg38.flagstat ${outdir_hg38}/
 rm ${scratch_dir}/${SAMPLE}_wCollate_hg38.sam 
 rm ${scratch_dir}/${SAMPLE}_wCollate_hg38.bam
 rm ${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam* 
