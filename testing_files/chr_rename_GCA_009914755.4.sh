@@ -2,8 +2,11 @@
 
 ## Adam 
 ## Rename T2T chromosomes names to match GrCh38
-## This script works with head.GCA_009914755.4 (genbank version of T2T)
+## This script works with GCA_009914755.4 (genbank version of T2T)
 
+#  ------>  How to run
+# chmod +x chr_rename_GCA_009914755.4.sh 
+# ./chr_rename_GCA_009914755.4.sh  GCA_009914755.4.fna
 T2T=$1
 
 sed -i 's/>CP068277.2/>chr1/g'   ${T2T}    
@@ -31,3 +34,7 @@ sed -i 's/>CP068256.2/>chr22/g'   ${T2T}
 sed -i 's/>CP068255.2/>chrX/g'   ${T2T}  
 sed -i 's/>CP086569.2/>chrY/g'   ${T2T} 
 sed -i 's/>CP068254.1/>chrM/g'   ${T2T} 
+
+
+
+
