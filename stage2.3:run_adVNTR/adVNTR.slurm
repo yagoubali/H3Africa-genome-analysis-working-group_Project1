@@ -8,12 +8,16 @@
 
 module load samtools/1.19
 module load bwa/github
+module load  anaconda3/2023.07
+conda activate /cbio/projects/022/adam/advntr 
+
+
 
 userId="yagoubali" ## change this 
+subfolder="adam" ## change this 
 
 
 
-subfolder="adam"
 PROJECT="/cbio/projects/022"
 #REF_GENOME_T2T="/cbio/projects/022/adam/datasets/human/T2T/GenBank/GCA_009914755.4_T2T-CHM13v2.0_genomic.fna"
 REF_GENOME_hg38="/cbio/dbs/references/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa"
@@ -21,17 +25,11 @@ REF_GENOME_hg38="/cbio/dbs/references/GRCh38_reference_genome/GRCh38_full_analys
 
 
 
-scratch_dir="/scratch3/users/${userId}/ExpansionHunter"
+scratch_dir="/scratch3/users/${userId}/advntr"
 #/cbio/projects/022/adam/project1_all_samples/ExpansionHunter_run"
-outdir="${PROJECT}/${subfolder}/project1_all_samples/ExpansionHunter_run"
+outdir="${PROJECT}/${subfolder}/project1_all_samples/advntr_run"
 outdir_hg38="${outdir}/hg38" 
 data="/cbio/projects/022/adam/project1_all_samples_old/mapping"  ## old mapping folder, we will change it from next week 
-
-
-
-## ExpansionHunter dir
-ExpansionHunter="/cbio/projects/022/adam/ExpansionHunter-v5.0.0-linux_x86_64"
-
 
 
 SAMPLE=$1
@@ -46,23 +44,24 @@ cp ${bam_file} ${scratch_dir}/
 echo "hg38 -->  step 1.1: index bam file"
 samtools index -@32 "${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam"
 
-## run ExpansionHunter 
-echo "hg38:  Running ExpansionHunter" 
-# ------------------------------------------>error2
-${ExpansionHunter}/bin/ExpansionHunter --reads ${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam \
-                   --reference ${REF_GENOME_hg38} \
-                   --variant-catalog ${ExpansionHunter_bin}/variant_catalog/grch38/ExpansionHunter_hg38.json \
-                   --output-prefix ${scratch_dir}/str_expansion_ ${SAMPLE}_hg38
+echo "hg38:  Running adVNTR   "    
+#### We can test it without e later
+advntr genotype \
+     --alignment_file   ${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam \
+     --fasta  ${REF_GENOME_hg38}  \
+     --working_directory ${scratch_dir} \
+     -m  /cbio/projects/022/adam/advntr/vntr_data/hg38_selected_VNTRs_Illumina.db  \
+     --outfmt  VCF \
+     -t 32 \
+     -e \
+     -o  ${scratch_dir}/${SAMPLE}_advtr_hg38.vcf
 
 ## copy results to output folder 
-cp ${scratch_dir}/str_expansion_${SAMPLE}_hg38*  ${outdir_hg38}/
-
-
-
+cp ${scratch_dir}/${SAMPLE}_advtr_hg38.vcf  ${outdir_hg38}/
 
 ## clean our intermediate files
-rm ${scratch_dir}/str_expansion_${SAMPLE}_hg38*
-rm ${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam* 
+rm  ${scratch_dir}/${SAMPLE}_advtr_hg38.vcf*
+rm   ${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam* 
 
 
 

@@ -1,16 +1,15 @@
 #!/usr/bin/bash
 
 userId="yagoubali" ## change this 
+subfolder="adam"   ## change this 
 
 
-subfolder="adam"   ### No need to change, as we are all working in the same folder
+
+
+
 PROJECT="/cbio/projects/022"   ## This is a shared folder 
-
-
-scratch_dir="/scratch3/users/${userId}/ExpansionHunter"   # This is your scratch3 folder
-
-
-outdir="/cbio/projects/022/${subfolder}/project1_all_samples/ExpansionHunter_run"
+scratch_dir="/scratch3/users/${userId}/advntr"   # This is your scratch3 folder
+outdir="/cbio/projects/022/${subfolder}/project1_all_samples/advntr_run"
 
 
 SUBMISSION_LOG=$(date '+%Y-%m-%d')
@@ -36,7 +35,7 @@ for bam_id in ${bam_ids[*]}; do
         echo "Submitting Job ${bam_id}" 
         sbatch --job-name=${bam_id}   \
                  --output=${scratch_dir}/${bam_id}_slurm_%j.out  \
-                 /users/${userId}/expansionHunter.slurm  ${bam_id}
+                 /users/${userId}/adVNTR.slurm  ${bam_id}
 
     echo "${bam_id} submitted" >> ${scratch_dir}/Jobs_${SUBMISSION_LOG}.txt            
 done 
