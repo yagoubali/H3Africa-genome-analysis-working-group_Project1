@@ -2,8 +2,15 @@
 
 
 userId="yagoubali"
+subfolder="adam"
 scratch_dir="/scratch3/users/${userId}/HipSTR"
-outdir="/cbio/users/${userId}/project1_all_samples/HipSTR_run"  
+
+PROJECT="/cbio/projects/022"
+RESULT="${scratch_dir}"
+OUTDIR="${PROJECT}/${subfolder}/project1_all_samples"
+
+
+
 #SUCCEED_RUN=$(cat ${RESULT}/succeed_run.txt)
 SUBMISSION_LOG=$(date '+%Y-%m-%d')
 
@@ -12,8 +19,8 @@ SUBMISSION_LOG=$(date '+%Y-%m-%d')
 baylor="/users/${userId}/H3A-Baylor_sample_list.txt"	# all samples
 bam_ids=($(cat ${baylor} | tr \\n " "))
 
-mkdir -p ${outdir}/T2T
-mkdir -p ${outdir}/hg38
+mkdir -p ${OUTDIR}/HipSTR_run/T2T
+mkdir -p ${OUTDIR}/HipSTR_run/hg38
 mkdir -p ${scratch_dir}
 
 for bam_id in ${bam_ids[*]}; do 
