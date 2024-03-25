@@ -15,7 +15,7 @@ subfolder="adam"
 
 
 PROJECT="/cbio/projects/022"
-bin_HipSTR="/cbio/users/${userId}/HipSTR"
+bin_HipSTR="${PROJECT}/${subfolder}/HipSTR"
 scratch_dir="/scratch3/users/${userId}/HipSTR"
 bed_HipSTR="${bin_HipSTR}/GRCh38.hipstr_reference.bed"
 

@@ -6,7 +6,7 @@ subfolder="adam"
 scratch_dir="/scratch3/users/${userId}/HipSTR"
 
 PROJECT="/cbio/projects/022"
-RESULT="${scratch_dir}"
+RESULT="${scratch_dir}/out"
 OUTDIR="${PROJECT}/${subfolder}/project1_all_samples"
 
 
@@ -22,7 +22,7 @@ bam_ids=($(cat ${baylor} | tr \\n " "))
 mkdir -p ${OUTDIR}/HipSTR_run/T2T
 mkdir -p ${OUTDIR}/HipSTR_run/hg38
 mkdir -p ${scratch_dir}
-
+mkdir -p ${RESULT}
 for bam_id in ${bam_ids[*]}; do 
     echo "Submitting Job ${bam_id}" 
 	sbatch --job-name=${bam_id} \
