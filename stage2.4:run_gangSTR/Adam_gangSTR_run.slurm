@@ -9,20 +9,21 @@
 
 module load samtools/1.19
 module load bwa/github
-
+module load  anaconda3/2023.07
+conda activate /cbio/projects/022/adam/gangstr
 userId="yagoubali"
 subfolder="adam"
 
 
 PROJECT="/cbio/projects/022"
-bin_HipSTR="${PROJECT}/${subfolder}/HipSTR"
-scratch_dir="/scratch3/users/${userId}/HipSTR"
-bed_HipSTR="${bin_HipSTR}/GRCh38.hipstr_reference.bed"
+bin_gangSTR="${PROJECT}/adam/gangstr"
+scratch_dir="/scratch3/users/${userId}/gangSTR"
+bed_gangSTR="${bin_gangSTR}/hg38_ver17.bed"
 
 
 data_dir="${PROJECT}/${subfolder}/project1_all_samples/mapping"
-outdir1="${PROJECT}/${subfolder}/project1_all_samples/HipSTR_run/T2T" 
-outdir2="${PROJECT}/${subfolder}/project1_all_samples/HipSTR_run/hg38" 
+outdir1="${PROJECT}/${subfolder}/project1_all_samples/gangSTR_run/T2T" 
+outdir2="${PROJECT}/${subfolder}/project1_all_samples/gangSTR_run/hg38" 
 
 
 
@@ -36,15 +37,19 @@ echo "T2T --> step 1.0: copy bam file"
 bam_file="${data_dir}/T2T/${SAMPLE}_wCollate.sorted.bam"
 cp ${bam_file} ${scratch_dir}/
 
+# GangSTR --bam file.bam 
+#        --ref ref.fa 
+#        --regions regions.bed 
+#        --out outprefix
 ## T2T
 echo "T2T -->  step 1.1: index T2T bam file"
 samtools index -@32 "${scratch_dir}/${SAMPLE}_wCollate.sorted.bam"
 
-echo "T2T --> step 1.2: call HipSTR"
-${bin_HipSTR}/HipSTR --bams    "${scratch_dir}/${SAMPLE}_wCollate.sorted.bam" \
-         --fasta         ${REF_GENOME_T2T} \
-         --regions       ${bed_HipSTR}  \
-         --str-vcf       "${scratch_dir}/strT2T_${SAMPLE}.vcf.gz" 
+echo "T2T --> step 1.2: call gangSTR"
+GangSTR   --bams    "${scratch_dir}/${SAMPLE}_wCollate.sorted.bam" \
+          --ref         ${REF_GENOME_T2T} \
+          --regions     ${bed_gangSTR}  \
+          --out       "${scratch_dir}/strT2T_${SAMPLE}.vcf.gz" 
          
 
 #### clean intermediate files
@@ -65,11 +70,11 @@ cp ${bam_file} ${scratch_dir}/
 echo "hg38 -->  step 1.1: index hg38 bam file"
 samtools index -@32 "${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam"
 
-echo "hg38 --> step 1.2: call HipSTR"
-${bin_HipSTR}/HipSTR --bams    "${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam" \
-         --fasta         ${REF_GENOME_hg38} \
-         --regions       ${bed_HipSTR}  \
-         --str-vcf       "${scratch_dir}/strhg38_${SAMPLE}.vcf.gz" 
+echo "hg38 --> step 1.2: call gangSTR"
+GangSTR   --bams    "${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam" \
+         --ref         ${REF_GENOME_hg38} \
+         --regions       ${bed_gangSTR}  \
+          --out       "${scratch_dir}/strhg38_${SAMPLE}.vcf.gz" 
 
 echo "hg38 -->  clean intermediate files"
 cp ${scratch_dir}/strhg38_${SAMPLE}.vcf.gz ${outdir2}/
