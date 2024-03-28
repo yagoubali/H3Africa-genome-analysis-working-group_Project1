@@ -10,9 +10,9 @@
 
 ## 4. TR genotyping
 
-     [1. HipSTR](./stage2.1:run_HipSTR/README.md)
-     [2. ExpansionHunter](./stage2.2:run_ExpansionHunter/README.md)
-     [3. adVNTR](./stage2.3:run_adVNTR/README.md)
-     [4. gangSTR](./stage2.4:run_gangSTR/README.md)
+[1. HipSTR](./stage2.1:run_HipSTR/README.md)
+[2. ExpansionHunter](./stage2.2:run_ExpansionHunter/README.md)
+[3. adVNTR](./stage2.3:run_adVNTR/README.md)
+[4. gangSTR](./stage2.4:run_gangSTR/README.md)
 
 ## 4. TR QC check
