@@ -15,7 +15,7 @@ OUTDIR="${PROJECT}/${subfolder}/project1_all_samples"
 SUBMISSION_LOG=$(date '+%Y-%m-%d')
 
 
-
+#baylor="/cbio/projects/022/adam/H3A-Baylor_sample_list.txt"
 baylor="/users/${userId}/H3A-Baylor_sample_list.txt"	# all samples
 bam_ids=($(cat ${baylor} | tr \\n " "))
 
