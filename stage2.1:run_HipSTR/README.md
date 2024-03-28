@@ -1,4 +1,4 @@
-> Files to run
+## Files to run
 
 > wget -c https://github.com/HipSTR-Tool/HipSTR-references/raw/master/human/GRCh38.hipstr_reference.bed.gz
 
