@@ -34,9 +34,9 @@ run_analysis(){
     ## copy bam file 
     echo "step 1: Copy bam file"
 
-    bam_file="${data}/${type_of_ref}/${SAMPLE}_wCollate.sorted.bam"
+    bam_file="${DATA}/${type_of_ref}/${SAMPLE}_wCollate.sorted.bam"
     if [[ "${type_of_ref}" == "hg38"  ]]; then
-      bam_file="${data}/hg38/${SAMPLE}_wCollate_hg38.sorted.bam"
+      bam_file="${DATA}/hg38/${SAMPLE}_wCollate_hg38.sorted.bam"
     fi
 
     cp ${bam_file} ${SCRATCH}/
