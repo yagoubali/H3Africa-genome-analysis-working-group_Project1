@@ -46,7 +46,7 @@ echo "T2T -->  step 1.1: index T2T bam file"
 samtools index -@32 "${scratch_dir}/${SAMPLE}_wCollate.sorted.bam"
 
 echo "T2T --> step 1.2: call gangSTR"
-GangSTR   --bams    "${scratch_dir}/${SAMPLE}_wCollate.sorted.bam" \
+GangSTR   --bam    "${scratch_dir}/${SAMPLE}_wCollate.sorted.bam" \
           --ref         ${REF_GENOME_T2T} \
           --regions     ${bed_gangSTR}  \
           --out       "${scratch_dir}/strT2T_${SAMPLE}.vcf.gz" 
@@ -70,7 +70,7 @@ echo "hg38 -->  step 1.1: index hg38 bam file"
 samtools index -@32 "${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam"
 
 echo "hg38 --> step 1.2: call gangSTR"
-GangSTR   --bams    "${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam" \
+GangSTR   --bam    "${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam" \
          --ref         ${REF_GENOME_hg38} \
          --regions       ${bed_gangSTR}  \
           --out       "${scratch_dir}/strhg38_${SAMPLE}.vcf.gz" 
