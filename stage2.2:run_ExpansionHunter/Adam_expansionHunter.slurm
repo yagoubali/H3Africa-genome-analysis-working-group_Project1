@@ -51,7 +51,7 @@ run_analysis(){
 
     ${ExpansionHunter}/bin/ExpansionHunter --reads ${SCRATCH}/${bam} \
                    --reference ${reference} \
-                   --variant-catalog ${ExpansionHunter_bin}/RepeatCatalogs/hg38/variant_catalog.json \
+                   --variant-catalog ${ExpansionHunter}/RepeatCatalogs/hg38/variant_catalog.json \
                    --output-prefix "${SCRATCH}/str_${SAMPLE}_${type_of_ref}"
 
     echo "step 3: Copy ExpansionHunter resuls"                
