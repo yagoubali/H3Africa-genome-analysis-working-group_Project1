@@ -12,7 +12,7 @@ OUTDIR="${PROJECT}/${subfolder}/project1_all_samples/ExpansionHunter_run"
 
 SUBMISSION_LOG=$(date '+%Y-%m-%d')
 
-baylor="/cbio/projects/022/adam/H3A-Baylor_sample_list.txt"	# all samples 346
+baylor="/cbio/projects/022/adam/H3A-Baylor_sample_list2.txt"	# all samples 346
 
 ## we store all bam ids in a bash array called bam_ids
 bam_ids=($(cat ${baylor} | tr \\n " "))
