@@ -25,7 +25,7 @@ REF_GENOME_hg38="/cbio/dbs/references/GRCh38_reference_genome/GRCh38_full_analys
 
 
 gangSTR="${PROJECT}/adam/gangstr"
-gangSTR_bed="${bin_gangSTR}/hg38_ver17.bed"
+gangSTR_bed="${gangSTR}/hg38_ver17.bed"
  
 
 

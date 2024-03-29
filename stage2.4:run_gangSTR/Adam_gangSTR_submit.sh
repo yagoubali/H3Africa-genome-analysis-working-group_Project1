@@ -6,7 +6,7 @@ subfolder="adam"
 
 
 PROJECT="/cbio/projects/022"
-SCRATCH="/scratch3/users/${userId}/ExpansionHunter"
+SCRATCH="/scratch3/users/${userId}/gangSTR"
 DATA="${PROJECT}/adam/project1_all_samples/mapping"
 RESULT="${SCRATCH}/out"
 OUTDIR="${PROJECT}/${subfolder}/project1_all_samples"
@@ -18,7 +18,7 @@ SUBMISSION_LOG=$(date '+%Y-%m-%d')
 
 
 #baylor="/cbio/projects/022/adam/H3A-Baylor_sample_list.txt"
-baylor="/users/${userId}/H3A-Baylor_sample_list2.txt"	# all samples
+baylor="/cbio/projects/022/adam/H3A-Baylor_sample_list2.txt"	# all samples 346
 bam_ids=($(cat ${baylor} | tr \\n " "))
 
 mkdir -p ${OUTDIR}/gangSTR_run/T2T
