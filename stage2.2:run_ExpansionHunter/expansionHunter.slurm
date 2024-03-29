@@ -9,60 +9,64 @@
 module load samtools/1.19
 module load bwa/github
 
-userId="yagoubali" ## change this 
 
-
-
+userId="yagoubali"
 subfolder="adam"
+
+
 PROJECT="/cbio/projects/022"
-#REF_GENOME_T2T="/cbio/projects/022/adam/datasets/human/T2T/GenBank/GCA_009914755.4_T2T-CHM13v2.0_genomic.fna"
+SCRATCH="/scratch3/users/${userId}/ExpansionHunter"
+DATA="${PROJECT}/adam/project1_all_samples/mapping"
+OUTDIR="${PROJECT}/${subfolder}/project1_all_samples/ExpansionHunter_run"
+REF_GENOME_T2T="/cbio/projects/022/adam/datasets/dbs/references/T2T/GCA_009914755.4/GCA_009914755.4_T2T-CHM13v2.0_genomic.fna"
 REF_GENOME_hg38="/cbio/dbs/references/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa"
 
-
-
-
-scratch_dir="/scratch3/users/${userId}/ExpansionHunter"
-#/cbio/projects/022/adam/project1_all_samples/ExpansionHunter_run"
-outdir="${PROJECT}/${subfolder}/project1_all_samples/ExpansionHunter_run"
-outdir_hg38="${outdir}/hg38" 
-data="/cbio/projects/022/adam/project1_all_samples_old/mapping"  ## old mapping folder, we will change it from next week 
-
-
-
-## ExpansionHunter dir
 ExpansionHunter="/cbio/projects/022/adam/ExpansionHunter-v5.0.0-linux_x86_64"
 
 
 
 SAMPLE=$1
 
+run_analysis(){
+    type_of_ref=$1  # {T2T, hg38}
+    reference=$2
+    
+    ## copy bam file 
+    echo "step 1: Copy bam file"
 
-## copy bam file 
-echo "hg38 --> step 1.0: copy bam file"
-bam_file="${data}/hg38/${SAMPLE}_wCollate_hg38.sorted.bam"
-cp ${bam_file} ${scratch_dir}/
+    bam_file="${data}/${type_of_ref}/${SAMPLE}_wCollate.sorted.bam"
+    if [[ "${type_of_ref}" == "hg38"  ]]; then
+      bam_file="${data}/hg38/${SAMPLE}_wCollate_hg38.sorted.bam"
+    fi
 
-## index bam file
-echo "hg38 -->  step 1.1: index bam file"
-samtools index -@32 "${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam"
+    cp ${bam_file} ${SCRATCH}/
 
-## run ExpansionHunter 
-echo "hg38:  Running ExpansionHunter" 
-# ------------------------------------------>error2
-${ExpansionHunter}/bin/ExpansionHunter --reads ${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam \
-                   --reference ${REF_GENOME_hg38} \
-                   --variant-catalog ${ExpansionHunter_bin}/variant_catalog/grch38/ExpansionHunter_hg38.json \
-                   --output-prefix ${scratch_dir}/str_expansion_ ${SAMPLE}_hg38
+    bam=$(basename -- "${bam_file}")
 
-## copy results to output folder 
-cp ${scratch_dir}/str_expansion_${SAMPLE}_hg38*  ${outdir_hg38}/
+    ## index bam file
+    echo "step 2: Index bam file"
+    samtools index -@32 "${SCRATCH}/${bam}"
 
+    echo "Running ExpansionHunter" 
 
+    ${ExpansionHunter}/bin/ExpansionHunter --reads ${SCRATCH}/${bam} \
+                   --reference ${reference} \
+                   --variant-catalog ${ExpansionHunter_bin}/RepeatCatalogs/hg38/variant_catalog.json \
+                   --output-prefix "${SCRATCH}/str_${SAMPLE}_${type_of_ref}"
 
+    echo "step 3: Copy ExpansionHunter resuls"                
+    cp ${SCRATCH}/str_${SAMPLE}_${type_of_ref}*  ${OUTDIR}/${type_of_ref}/
 
-## clean our intermediate files
-rm ${scratch_dir}/str_expansion_${SAMPLE}_hg38*
-rm ${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam* 
+    echo "step 4: Clean scratch3 "                
+    rm ${SCRATCH}/str_${SAMPLE}_${type_of_ref}*
+    rm ${SCRATCH}/${bam}*
 
+}
 
+## Run T2T
 
+run_analysis "T2T"  ${REF_GENOME_T2T}
+
+#Run hg38
+
+run_analysis "hg38"  ${REF_GENOME_hg38}

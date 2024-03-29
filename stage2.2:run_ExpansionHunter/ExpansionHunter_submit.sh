@@ -1,16 +1,13 @@
 #!/usr/bin/bash
 
-userId="yagoubali" ## change this 
+userId="yagoubali"
+subfolder="adam"
 
 
-subfolder="adam"   ### No need to change, as we are all working in the same folder
-PROJECT="/cbio/projects/022"   ## This is a shared folder 
-
-
-scratch_dir="/scratch3/users/${userId}/ExpansionHunter"   # This is your scratch3 folder
-
-
-outdir="/cbio/projects/022/${subfolder}/project1_all_samples/ExpansionHunter_run"
+PROJECT="/cbio/projects/022"
+SCRATCH="/scratch3/users/${userId}/ExpansionHunter"
+DATA="${PROJECT}/adam/project1_all_samples/mapping"
+OUTDIR="${PROJECT}/${subfolder}/project1_all_samples/ExpansionHunter_run"
 
 
 SUBMISSION_LOG=$(date '+%Y-%m-%d')
@@ -25,8 +22,9 @@ bam_ids=($(cat ${baylor} | tr \\n " "))
 ## -------> just in case we missed some information during the conversion process
 ##  ------> We converted cram files to fastq and there might be some reads have been lost.
 
-mkdir -p ${outdir}/hg38
-mkdir -p ${scratch_dir}
+mkdir -p ${OUTDIR}/hg38
+mkdir -p ${OUTDIR}/T2T
+mkdir -p ${SCRATCH}
 
 
 ## for loop will run pararell ananlyis for all 346 samples
@@ -35,8 +33,8 @@ for bam_id in ${bam_ids[*]}; do
       # here we run our slurm code using sbatch
         echo "Submitting Job ${bam_id}" 
         sbatch --job-name=${bam_id}   \
-                 --output=${scratch_dir}/${bam_id}_slurm_%j.out  \
+                 --output=${SCRATCH}/${bam_id}_slurm_%j.out  \
                  /users/${userId}/expansionHunter.slurm  ${bam_id}
 
-    echo "${bam_id} submitted" >> ${scratch_dir}/Jobs_${SUBMISSION_LOG}.txt            
+    echo "${bam_id} submitted" >> ${SCRATCH}/Jobs_${SUBMISSION_LOG}.txt            
 done 
