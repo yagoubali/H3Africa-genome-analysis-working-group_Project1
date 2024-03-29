@@ -3,10 +3,12 @@
 
 userId="yagoubali"
 subfolder="adam"
-scratch_dir="/scratch3/users/${userId}/gangSTR"
+
 
 PROJECT="/cbio/projects/022"
-RESULT="${scratch_dir}/out"
+SCRATCH="/scratch3/users/${userId}/ExpansionHunter"
+DATA="${PROJECT}/adam/project1_all_samples/mapping"
+RESULT="${SCRATCH}/out"
 OUTDIR="${PROJECT}/${subfolder}/project1_all_samples"
 
 
@@ -16,12 +18,12 @@ SUBMISSION_LOG=$(date '+%Y-%m-%d')
 
 
 #baylor="/cbio/projects/022/adam/H3A-Baylor_sample_list.txt"
-baylor="/users/${userId}/H3A-Baylor_sample_list.txt"	# all samples
+baylor="/users/${userId}/H3A-Baylor_sample_list2.txt"	# all samples
 bam_ids=($(cat ${baylor} | tr \\n " "))
 
 mkdir -p ${OUTDIR}/gangSTR_run/T2T
 mkdir -p ${OUTDIR}/gangSTR_run/hg38
-mkdir -p ${scratch_dir}
+mkdir -p ${SCRATCH}
 mkdir -p ${RESULT}
 for bam_id in ${bam_ids[*]}; do 
     echo "Submitting Job ${bam_id}" 
