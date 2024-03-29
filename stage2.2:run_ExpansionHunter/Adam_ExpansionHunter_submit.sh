@@ -34,7 +34,7 @@ for bam_id in ${bam_ids[*]}; do
         echo "Submitting Job ${bam_id}" 
         sbatch --job-name=${bam_id}   \
                  --output=${SCRATCH}/${bam_id}_slurm_%j.out  \
-                 /users/${userId}/Adam_expansionHunter.slurm  ${bam_id}
+                 /users/${userId}/expansionHunter.slurm  ${bam_id}
 
     echo "${bam_id} submitted" >> ${SCRATCH}/Jobs_${SUBMISSION_LOG}.txt            
 done 
