@@ -8,6 +8,8 @@
 
 module load samtools/1.19
 module load bwa/github
+module load  anaconda3/2023.07
+conda activate /cbio/projects/022/adam/advntr 
 
 
 userId="yagoubali"
@@ -15,18 +17,16 @@ subfolder="adam"
 
 
 PROJECT="/cbio/projects/022"
-SCRATCH="/scratch3/users/${userId}/ExpansionHunter"
+SCRATCH="/scratch3/users/${userId}/advntr"
 DATA="${PROJECT}/adam/project1_all_samples/mapping"
-OUTDIR="${PROJECT}/${subfolder}/project1_all_samples/ExpansionHunter_run"
+OUTDIR="${PROJECT}/${subfolder}/project1_all_samples/advntr_run"
 REF_GENOME_T2T="/cbio/projects/022/adam/datasets/dbs/references/T2T/GCA_009914755.4/GCA_009914755.4_T2T-CHM13v2.0_genomic.fna"
 REF_GENOME_hg38="/cbio/dbs/references/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa"
 
-ExpansionHunter="/cbio/projects/022/adam/ExpansionHunter-v5.0.0-linux_x86_64"
-
+  ## old mapping folder, we will change it from next week 
 
 
 SAMPLE=$1
-
 run_analysis(){
     type_of_ref=$1  # {T2T, hg38}
     reference=$2
@@ -47,15 +47,17 @@ run_analysis(){
     echo "step 2: Index bam file"
     samtools index -@32 "${SCRATCH}/${bam}"
 
-    echo "Running ExpansionHunter" 
+    echo "Running adVNTR" 
+    advntr genotype \
+     --alignment_file  ${SCRATCH}/${bam}  \
+     --fasta  ${reference}  \
+     --working_directory ${SCRATCH} \
+     -m  /cbio/projects/022/adam/advntr/vntr_data/hg38_selected_VNTRs_Illumina.db  \
+     --outfmt  VCF \
+     -t 32 \
+     -o "${SCRATCH}/str_${SAMPLE}_${type_of_ref}.vcf"
 
-    ${ExpansionHunter}/bin/ExpansionHunter --reads ${SCRATCH}/${bam} \
-                   --reference ${reference} \
-                   --variant-catalog ${ExpansionHunter}/RepeatCatalogs/hg38/variant_catalog.json \
-                   --output-prefix "${SCRATCH}/str_${SAMPLE}_${type_of_ref}" \
-                   --threads 32
-
-    echo "step 3: Copy ExpansionHunter resuls"                
+    echo "step 3: Copy adVNTR resuls"                
     cp ${SCRATCH}/str_${SAMPLE}_${type_of_ref}*  ${OUTDIR}/${type_of_ref}/
 
     echo "step 4: Clean scratch3 "                
