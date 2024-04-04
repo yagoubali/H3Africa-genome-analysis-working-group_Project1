@@ -52,8 +52,8 @@ run_analysis(){
      --alignment_file  ${SCRATCH}/${bam}  \
      --fasta  ${reference}  \
      --working_directory ${SCRATCH} \
-     -m  /cbio/projects/022/adam/advntr/vntr_data/hg38_selected_VNTRs_Illumina.db  \
-     --outfmt  VCF \
+     -m  "/cbio/projects/022/adam/advntr/vntr_data/hg38_selected_VNTRs_Illumina.db"  \
+     --outfmt  vcf \
      -t 32 \
      -o "${SCRATCH}/str_${SAMPLE}_${type_of_ref}.vcf"
 
