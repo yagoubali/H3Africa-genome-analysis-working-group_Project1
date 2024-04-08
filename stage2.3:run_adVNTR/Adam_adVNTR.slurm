@@ -60,6 +60,8 @@ run_analysis(){
     echo "step 3: Copy adVNTR resuls"                
     cp ${SCRATCH}/str_${SAMPLE}_${type_of_ref}*  ${OUTDIR}/${type_of_ref}/
 
+#/cbio/projects/022/adam/advntr/vntr_data/VNTR_loci_gene_proximal_v1.bed
+
     echo "step 4: Clean scratch3 "                
     rm ${SCRATCH}/str_${SAMPLE}_${type_of_ref}*
     rm ${SCRATCH}/${bam}*
