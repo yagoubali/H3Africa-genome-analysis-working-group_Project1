@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 #SBATCH --nodes=1
-#SBATCH --ntasks=32
+#SBATCH --ntasks=2
 #SBATCH --time=180:00:00  # 180 hours 
 #SBATCH --mem=24G
 #SBATCH --export=ALL
@@ -39,13 +39,13 @@ run_analysis(){
       bam_file="${DATA}/hg38/${SAMPLE}_wCollate_hg38.sorted.bam"
     fi
 
-    cp ${bam_file} ${SCRATCH}/
+    cp ${bam_file}* ${SCRATCH}/
 
     bam=$(basename -- "${bam_file}")
 
     ## index bam file
-    echo "step 2: Index bam file"
-    samtools index -@32 "${SCRATCH}/${bam}"
+    #echo "step 2: Index bam file"
+    #samtools index -@32 "${SCRATCH}/${bam}"
 
     echo "Running adVNTR" 
     advntr genotype \
@@ -54,7 +54,7 @@ run_analysis(){
      --working_directory ${SCRATCH} \
      -m  "/cbio/projects/022/adam/advntr/vntr_data/hg38_selected_VNTRs_Illumina.db"  \
      --outfmt  vcf \
-     -t 32 \
+     -t 2 \
      -o "${SCRATCH}/str_${SAMPLE}_${type_of_ref}.vcf"
 
     echo "step 3: Copy adVNTR resuls"                
