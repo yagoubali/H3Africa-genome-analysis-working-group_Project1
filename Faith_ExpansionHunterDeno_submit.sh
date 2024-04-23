@@ -5,9 +5,9 @@ subfolder="faith"
 
 
 PROJECT="/cbio/projects/022"
-SCRATCH="/scratch3/users/${userId}/ExpansionHunterDenovo"
+SCRATCH="/scratch3/users/${userId}/straglr"
 DATA="${PROJECT}/adam/project1_all_samples/mapping"
-OUTDIR="${PROJECT}/${subfolder}/project1_all_samples/ExpansionHunterDenovo_run"
+OUTDIR="${PROJECT}/${subfolder}/project1_all_samples/straglr_run"
 
 
 SUBMISSION_LOG=$(date '+%Y-%m-%d')
@@ -34,7 +34,7 @@ for bam_id in ${bam_ids[*]}; do
         echo "Submitting Job ${bam_id}" 
         sbatch --job-name=${bam_id}   \
                  --output=${SCRATCH}/${bam_id}_slurm_%j.out  \
-                 /users/${userId}/Adam_expansionHunterDeno.slurm  ${bam_id}
+                 /users/${userId}/faith_straglr.slurm  ${bam_id}
 
     echo "${bam_id} submitted" >> ${SCRATCH}/Jobs_${SUBMISSION_LOG}.txt            
 done 
