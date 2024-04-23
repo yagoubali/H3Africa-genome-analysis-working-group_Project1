@@ -15,9 +15,9 @@ subfolder="faith"
 
 
 PROJECT="/cbio/projects/022"
-SCRATCH="/scratch3/users/${userId}/ExpansionHunterDenovo"
+SCRATCH="/scratch3/users/${userId}/straglr"
 DATA="${PROJECT}/adam/project1_all_samples/mapping"
-OUTDIR="${PROJECT}/${subfolder}/project1_all_samples/ExpansionHunterDenovo_run"
+OUTDIR="${PROJECT}/${subfolder}/project1_all_samples/straglr_run"
 REF_GENOME_T2T="/cbio/projects/022/adam/datasets/dbs/references/T2T/GCA_009914755.4/GCA_009914755.4_T2T-CHM13v2.0_genomic.fna"
 REF_GENOME_hg38="/cbio/dbs/references/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa"
 bed_HipSTR="${bin_HipSTR}/GRCh38.hipstr_reference.bed"
@@ -46,7 +46,7 @@ run_analysis(){
     echo "step 2: Index bam file"
     samtools index -@32 "${SCRATCH}/${bam}"
 
-    echo "Running ExpansionHunterDenovo" 
+    echo "Running straglr" 
 
     $python straglr.py  ${SCRATCH}/${bam} \
                    ${reference} \
@@ -74,7 +74,7 @@ run_analysis2(){
     reference=$2
     
     ## copy bam file 
-    echo "step 1: Copy bam file"
+    echo "Step 1: Copy bam file"
 
     bam_file="${DATA}/${type_of_ref}/${hg38_SAMPLE}_wCollate.sorted.bam"
     if [[ "${type_of_ref}" == "hg38"  ]]; then
