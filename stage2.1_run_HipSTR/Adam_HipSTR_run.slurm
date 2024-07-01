@@ -15,63 +15,64 @@ subfolder="adam"
 
 
 PROJECT="/cbio/projects/022"
+SCRATCH="/scratch3/users/${userId}/HipSTR"
+DATA="${PROJECT}/${subfolder}/project1_all_samples/mapping"
+OUTDIR="${PROJECT}/${subfolder}/project1_all_samples/HipSTR_run" 
+REF_GENOME_T2T="/cbio/projects/022/adam/datasets/dbs/references/T2T/GCA_009914755.4/GCA_009914755.4_T2T-CHM13v2.0_genomic.fna"
+REF_GENOME_hg38="/cbio/dbs/references/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa"
+
+
 bin_HipSTR="${PROJECT}/${subfolder}/HipSTR"
-scratch_dir="/scratch3/users/${userId}/HipSTR"
 bed_HipSTR="${bin_HipSTR}/GRCh38.hipstr_reference.bed"
 
 
-data_dir="${PROJECT}/${subfolder}/project1_all_samples/mapping"
-outdir1="${PROJECT}/${subfolder}/project1_all_samples/HipSTR_run/T2T" 
-outdir2="${PROJECT}/${subfolder}/project1_all_samples/HipSTR_run/hg38" 
 
 
 
-REF_GENOME_T2T="/cbio/projects/022/adam/datasets/dbs/references/T2T/GCA_009914755.4/GCA_009914755.4_T2T-CHM13v2.0_genomic.fna"
-REF_GENOME_hg38="/cbio/dbs/references/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa"
+
 SAMPLE=$1
 
+run_analysis(){
+    type_of_ref=$1  # {T2T, hg38}
+    reference=$2
+    
+    ## copy bam file 
+    echo "step 1: Copy bam file"
 
+    bam_file="${DATA}/${type_of_ref}/${SAMPLE}_wCollate.sorted.bam"
+    if [[ "${type_of_ref}" == "hg38"  ]]; then
+      bam_file="${DATA}/hg38/${SAMPLE}_wCollate_hg38.sorted.bam"
+    fi
 
-echo "T2T --> step 1.0: copy bam file"
-bam_file="${data_dir}/T2T/${SAMPLE}_wCollate.sorted.bam"
-cp ${bam_file} ${scratch_dir}/
+    cp ${bam_file}* ${SCRATCH}/
 
-## T2T
-echo "T2T -->  step 1.1: index T2T bam file"
-samtools index -@32 "${scratch_dir}/${SAMPLE}_wCollate.sorted.bam"
+    bam=$(basename -- "${bam_file}")
 
-echo "T2T --> step 1.2: call HipSTR"
-${bin_HipSTR}/HipSTR --bams    "${scratch_dir}/${SAMPLE}_wCollate.sorted.bam" \
-         --fasta         ${REF_GENOME_T2T} \
+    ## index bam file
+    #echo "step 2: Index bam file"
+    #samtools index -@32 "${SCRATCH}/${bam}"
+
+    echo "Running HipSTR" 
+    ${bin_HipSTR}/HipSTR --bams    "${scratch_dir}/${bam}" \
+         --fasta         ${reference} \
          --regions       ${bed_HipSTR}  \
-         --str-vcf       "${scratch_dir}/strT2T_${SAMPLE}.vcf.gz" 
-         
+         --str-vcf       "${SCRATCH}/str_${SAMPLE}_${type_of_ref}.vcf.gz"  \
+         --def-stutter-model   \
+         --min-reads 10
 
-#### clean intermediate files
-echo "T2T -->  clean intermediate files"
-cp ${scratch_dir}/strT2T_${SAMPLE}.vcf.gz ${outdir1}/
-rm  ${scratch_dir}/strT2T_${SAMPLE}.vcf.gz 
-rm  ${scratch_dir}/${SAMPLE}_wCollate.sorted.bam*
+    echo "step 3: Copy HipSTR resuls"                
+    cp ${SCRATCH}/str_${SAMPLE}_${type_of_ref}*  ${OUTDIR}/${type_of_ref}/
 
+    echo "step 4: Clean scratch3 "                
+    rm ${SCRATCH}/str_${SAMPLE}_${type_of_ref}*
+    rm ${SCRATCH}/${bam}*
 
+}
 
+## Run T2T
 
-echo "hg38 --> step 1.0: copy bam file"  ## ex  BWR0064_wCollate_hg38.sorted.bam
+run_analysis "T2T"  ${REF_GENOME_T2T}
 
-bam_file="${data_dir}/hg38/${SAMPLE}_wCollate_hg38.sorted.bam"
-cp ${bam_file} ${scratch_dir}/
+#Run hg38
 
-## T2T
-echo "hg38 -->  step 1.1: index hg38 bam file"
-samtools index -@32 "${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam"
-
-echo "hg38 --> step 1.2: call HipSTR"
-${bin_HipSTR}/HipSTR --bams    "${scratch_dir}/${SAMPLE}_wCollate_hg38.sorted.bam" \
-         --fasta         ${REF_GENOME_hg38} \
-         --regions       ${bed_HipSTR}  \
-         --str-vcf       "${scratch_dir}/strhg38_${SAMPLE}.vcf.gz" 
-
-echo "hg38 -->  clean intermediate files"
-cp ${scratch_dir}/strhg38_${SAMPLE}.vcf.gz ${outdir2}/
-rm  ${scratch_dir}/strhg38_${SAMPLE}* 
-rm  ${scratch_dir}/${SAMPLE}_*
+run_analysis "hg38"  ${REF_GENOME_hg38}
