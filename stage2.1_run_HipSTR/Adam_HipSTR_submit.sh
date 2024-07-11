@@ -16,7 +16,7 @@ SUBMISSION_LOG=$(date '+%Y-%m-%d')
 
 
 
-baylor="/users/${userId}/H3A-Baylor_sample_list.txt"	# all samples
+baylor="/cbio/projects/022/adam/H3A-Baylor_sample_list.txt"	# all samples
 bam_ids=($(cat ${baylor} | tr \\n " "))
 
 mkdir -p ${OUTDIR}/HipSTR_run/T2T
