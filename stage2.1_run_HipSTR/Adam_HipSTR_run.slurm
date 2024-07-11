@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 #SBATCH --nodes=1
-#SBATCH --ntasks=32
+#SBATCH --ntasks=2
 #SBATCH --time=180:00:00
 #SBATCH --mem=24G
 #SBATCH --export=ALL
@@ -23,7 +23,6 @@ REF_GENOME_hg38="/cbio/dbs/references/GRCh38_reference_genome/GRCh38_full_analys
 
 
 bin_HipSTR="${PROJECT}/${subfolder}/HipSTR"
-bed_HipSTR="${bin_HipSTR}/GRCh38.hipstr_reference.bed"
 
 
 
@@ -35,16 +34,19 @@ SAMPLE=$1
 run_analysis(){
     type_of_ref=$1  # {T2T, hg38}
     reference=$2
-    
+    bed_HipSTR="${bin_HipSTR}/T2T.hipstr_reference.bed"
+
     ## copy bam file 
     echo "step 1: Copy bam file"
 
     bam_file="${DATA}/${type_of_ref}/${SAMPLE}_wCollate.sorted.bam"
     if [[ "${type_of_ref}" == "hg38"  ]]; then
       bam_file="${DATA}/hg38/${SAMPLE}_wCollate_hg38.sorted.bam"
+      bed_HipSTR="${bin_HipSTR}/GRCh38.hipstr_reference.bed"
     fi
 
-    cp ${bam_file}* ${SCRATCH}/
+    cp ${bam_file} ${SCRATCH}/
+    cp ${bam_file}.bai ${SCRATCH}/
 
     bam=$(basename -- "${bam_file}")
 
@@ -53,7 +55,7 @@ run_analysis(){
     #samtools index -@32 "${SCRATCH}/${bam}"
 
     echo "Running HipSTR" 
-    ${bin_HipSTR}/HipSTR --bams    "${scratch_dir}/${bam}" \
+    ${bin_HipSTR}/HipSTR --bams    "${SCRATCH}/${bam}" \
          --fasta         ${reference} \
          --regions       ${bed_HipSTR}  \
          --str-vcf       "${SCRATCH}/str_${SAMPLE}_${type_of_ref}.vcf.gz"  \
