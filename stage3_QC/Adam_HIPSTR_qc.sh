@@ -7,7 +7,7 @@ subfolder="adam"
 
 PROJECT="/cbio/projects/022"
 SCRATCH="/scratch3/users/${userId}/HipSTR_qc"
-DATA="${PROJECT}/adam/project1_all_samples/HipSTR_run"
+DATA="${PROJECT}/adam/project1_all_samples/HipSTR_run_old"
 RESULT="${SCRATCH}/out"
 OUTDIR="${PROJECT}/${subfolder}/project1_all_samples"
 

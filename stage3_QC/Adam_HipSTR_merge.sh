@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 #SBATCH --nodes=1
-#SBATCH --ntasks=32
+#SBATCH --ntasks=2
 #SBATCH --time=180:00:00
 #SBATCH --mem=24G
 #SBATCH --output=/scratch3/users/yagoubali/HipSTR_merged/%x.%j.out
@@ -42,29 +42,26 @@ run_analysis(){
   reference=$2
   files=''
   separator=',' # e.g. constructing regex, pray it does not contain %s
-   if [[ "${type_of_ref}" == "T2T"  ]]; then
-      files=($(ls ${DATA}/${type_of_ref}/*.gz ))
-    else
-      files=($(ls ${DATA}/hg38/*.gz ))
-    fi 
-    all_files="$( printf "${separator}%s" "${files[@]}" )"
-    all_files="${all_files:${#separator}}" # remove leading separator
+  files=($(ls ${DATA}/${type_of_ref}/*.gz ))
+
+  all_files="$( printf "${separator}%s" "${files[@]}" )"
+  all_files="${all_files:${#separator}}" # remove leading separator
   
 
-     echo "step 1: merge  vcf file"
-      mergeSTR \
+  echo "step 1: merge  vcf file"
+  mergeSTR \
 	  --vcfs ${all_files} \
 	  --out ${SCRATCH}/${type_of_ref}_merged \
 	  --vcftype hipstr \
 	  --verbose
 
-   bgzip -c ${SCRATCH}/${type_of_ref}_merged.vcf  >${SCRATCH}/${type_of_ref}_merged.vcf.gz
-  tabix -p vcf ${SCRATCH}/${type_of_ref}_merged.vcf.gz
+  #bgzip -c ${SCRATCH}/${type_of_ref}_merged.vcf  >${SCRATCH}/${type_of_ref}_merged.vcf.gz
+  #tabix -p vcf ${SCRATCH}/${type_of_ref}_merged.vcf.gz
 
 
     echo "step 5: Clean scratch3 " 
     #rm ${SCRATCH}/${vcf}               
-    mv ${SCRATCH}/${type_of_ref}_merged*  ${OUTDIR}/
+  #  mv ${SCRATCH}/${type_of_ref}_merged*  ${OUTDIR}/
 }
 
 ## Run T2T

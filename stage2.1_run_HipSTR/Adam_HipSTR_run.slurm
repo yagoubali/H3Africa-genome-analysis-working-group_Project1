@@ -40,13 +40,14 @@ run_analysis(){
     echo "step 1: Copy bam file"
 
     bam_file="${DATA}/${type_of_ref}/${SAMPLE}_wCollate.sorted.bam"
-    if [[ "${type_of_ref}" == "hg38"  ]]; then
+    if [[ "${type_of_ref}" == "hg38"  ]]
+     then
       bam_file="${DATA}/hg38/${SAMPLE}_wCollate_hg38.sorted.bam"
       bed_HipSTR="${bin_HipSTR}/GRCh38.hipstr_reference.bed"
     fi
 
-    cp ${bam_file} ${SCRATCH}/
-    cp ${bam_file}.bai ${SCRATCH}/
+    cp ${bam_file} ${SCRATCH}/${type_of_ref}/
+    cp ${bam_file}.bai ${SCRATCH}/${type_of_ref}/
 
     bam=$(basename -- "${bam_file}")
 
@@ -55,19 +56,19 @@ run_analysis(){
     #samtools index -@32 "${SCRATCH}/${bam}"
 
     echo "Running HipSTR" 
-    ${bin_HipSTR}/HipSTR --bams    "${SCRATCH}/${bam}" \
+    ${bin_HipSTR}/HipSTR --bams    "${SCRATCH}/${type_of_ref}/${bam}" \
          --fasta         ${reference} \
          --regions       ${bed_HipSTR}  \
-         --str-vcf       "${SCRATCH}/str_${SAMPLE}_${type_of_ref}.vcf.gz"  \
+         --str-vcf       "${SCRATCH}/${type_of_ref}/str_${SAMPLE}_${type_of_ref}.vcf.gz"  \
          --def-stutter-model   \
          --min-reads 10
 
     echo "step 3: Copy HipSTR resuls"                
-    cp ${SCRATCH}/str_${SAMPLE}_${type_of_ref}*  ${OUTDIR}/${type_of_ref}/
+    cp ${SCRATCH}/${type_of_ref}/str_${SAMPLE}_${type_of_ref}*  ${OUTDIR}/${type_of_ref}/
 
     echo "step 4: Clean scratch3 "                
-    rm ${SCRATCH}/str_${SAMPLE}_${type_of_ref}*
-    rm ${SCRATCH}/${bam}*
+    rm ${SCRATCH}/${type_of_ref}/str_${SAMPLE}_${type_of_ref}*
+    rm ${SCRATCH}/${type_of_ref}/${bam}*
 
 }
 

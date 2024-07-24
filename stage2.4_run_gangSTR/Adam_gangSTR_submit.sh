@@ -17,14 +17,15 @@ OUTDIR="${PROJECT}/${subfolder}/project1_all_samples"
 SUBMISSION_LOG=$(date '+%Y-%m-%d')
 
 
-#baylor="/cbio/projects/022/adam/H3A-Baylor_sample_list.txt"
-baylor="/cbio/projects/022/adam/H3A-Baylor_sample_list2.txt"	# all samples 346
+baylor="/cbio/projects/022/adam/H3A-Baylor_sample_list.txt"
 bam_ids=($(cat ${baylor} | tr \\n " "))
 
 mkdir -p ${OUTDIR}/gangSTR_run/T2T
 mkdir -p ${OUTDIR}/gangSTR_run/hg38
-mkdir -p ${SCRATCH}
+mkdir -p ${SCRATCH}/T2T
+mkdir -p ${SCRATCH}/hg38
 mkdir -p ${RESULT}
+
 for bam_id in ${bam_ids[*]}; do 
     echo "Submitting Job ${bam_id}" 
 	sbatch --job-name=${bam_id} \

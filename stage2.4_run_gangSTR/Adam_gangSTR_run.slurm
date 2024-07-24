@@ -25,7 +25,6 @@ REF_GENOME_hg38="/cbio/dbs/references/GRCh38_reference_genome/GRCh38_full_analys
 
 
 gangSTR="${PROJECT}/adam/gangstr"
-gangSTR_bed="${gangSTR}/hg38_ver17.bed"
  
 
 
@@ -34,36 +33,39 @@ SAMPLE=$1
 run_analysis(){
     type_of_ref=$1  # {T2T, hg38}
     reference=$2
-    
+    gangSTR_bed="${gangSTR}/T2T_gangstr.bed"
     ## copy bam file 
     echo "step 1: Copy bam file"
 
     bam_file="${DATA}/${type_of_ref}/${SAMPLE}_wCollate.sorted.bam"
-    if [[ "${type_of_ref}" == "hg38"  ]]; then
+    if [[ "${type_of_ref}" == "hg38"  ]]
+     then
       bam_file="${DATA}/hg38/${SAMPLE}_wCollate_hg38.sorted.bam"
+      gangSTR_bed="${gangSTR}/hg38_ver17.bed"
     fi
 
-    cp ${bam_file} ${SCRATCH}/
+    cp ${bam_file}   ${SCRATCH}/${type_of_ref}/
+    cp ${bam_file}.bai ${SCRATCH}/${type_of_ref}/
 
     bam=$(basename -- "${bam_file}")
 
     ## index bam file
-    echo "step 2: Index bam file"
-    samtools index -@32 "${SCRATCH}/${bam}"
+    #echo "step 2: Index bam file"
+    #samtools index -@32 "${SCRATCH}/${bam}"
 
     echo "Running gangSTR" 
-    GangSTR   --bam    ${SCRATCH}/${bam} \
+    GangSTR   --bam    ${SCRATCH}/${type_of_ref}/${bam} \
               --ref          ${reference}\
               --regions       ${gangSTR_bed}  \
-              --out       "${SCRATCH}/str_${SAMPLE}_${type_of_ref}.vcf.gz" 
+              --out       "${SCRATCH}/${type_of_ref}/str_${SAMPLE}_${type_of_ref}.vcf.gz" 
 
 
     echo "step 3: Copy gangSTR resuls"                
-    cp ${SCRATCH}/str_${SAMPLE}_${type_of_ref}*  ${OUTDIR}/${type_of_ref}/
+    cp ${SCRATCH}/${type_of_ref}/str_${SAMPLE}_${type_of_ref}*  ${OUTDIR}/${type_of_ref}/
 
     echo "step 4: Clean scratch3 "                
-    rm ${SCRATCH}/str_${SAMPLE}_${type_of_ref}*
-    rm ${SCRATCH}/${bam}*
+    rm ${SCRATCH}/${type_of_ref}/str_${SAMPLE}_${type_of_ref}*
+    rm ${SCRATCH}/${type_of_ref}/${bam}*
 
 }
 

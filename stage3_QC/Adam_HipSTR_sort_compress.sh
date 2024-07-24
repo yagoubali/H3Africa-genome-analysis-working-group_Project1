@@ -24,12 +24,13 @@ bam_ids=($(cat ${baylor} | tr \\n " "))
 
 mkdir -p ${OUTDIR}/HipSTR_sort/T2T
 mkdir -p ${OUTDIR}/HipSTR_sort/hg38
-mkdir -p ${SCRATCH}
+mkdir -p ${SCRATCH}/T2T
+mkdir -p ${SCRATCH}/hg38
 mkdir -p ${RESULT}
 for bam_id in ${bam_ids[*]}; do 
     echo "Submitting Job ${bam_id}" 
 	sbatch --job-name=${bam_id} \
 	       	       --output=${RESULT}/${bam_id}_slurm_%j.out \
-	      	        /users/${userId}/Adam_HIPSTR_sort_compress.slurm ${bam_id}
+	      	        /users/${userId}/Adam_HipSTR_sort_compress.slurm ${bam_id}
 	echo "${bam_id} submitted" >> ${RESULT}/Jobs_${SUBMISSION_LOG}.txt
 done 

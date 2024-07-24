@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 #SBATCH --nodes=1
-#SBATCH --ntasks=32
+#SBATCH --ntasks=2
 #SBATCH --time=180:00:00
 #SBATCH --mem=24G
 #SBATCH --output=/scratch3/users/yagoubali/HipSTR_qc/%x.%j.out2
@@ -21,7 +21,7 @@ subfolder="adam"
 
 PROJECT="/cbio/projects/022"
 SCRATCH="/scratch3/users/${userId}/HipSTR_qc"
-DATA="${PROJECT}/adam/project1_all_samples/HipSTR_run"
+DATA="${PROJECT}/adam/project1_all_samples/HipSTR_run_old"
 OUTDIR="${PROJECT}/${subfolder}/project1_all_samples/HipSTR_qc"
 REF_GENOME_T2T="/cbio/projects/022/adam/datasets/dbs/references/T2T/GCA_009914755.4/GCA_009914755.4_T2T-CHM13v2.0_genomic.fna"
 REF_GENOME_hg38="/cbio/dbs/references/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa"

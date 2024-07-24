@@ -21,7 +21,8 @@ bam_ids=($(cat ${baylor} | tr \\n " "))
 
 mkdir -p ${OUTDIR}/HipSTR_run/T2T
 mkdir -p ${OUTDIR}/HipSTR_run/hg38
-mkdir -p ${scratch_dir}
+mkdir -p ${scratch_dir}/T2T
+mkdir -p ${scratch_dir}/hg38
 mkdir -p ${RESULT}
 for bam_id in ${bam_ids[*]}; do 
     echo "Submitting Job ${bam_id}" 
