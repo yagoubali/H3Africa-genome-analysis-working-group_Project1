@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 #SBATCH --nodes=1
-#SBATCH --ntasks=32
+#SBATCH --ntasks=2
 #SBATCH --time=180:00:00
 #SBATCH --mem=24G
 #SBATCH --export=ALL
@@ -24,7 +24,7 @@ REF_GENOME_T2T="/cbio/projects/022/adam/datasets/dbs/references/T2T/GCA_00991475
 REF_GENOME_hg38="/cbio/dbs/references/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa"
 
 
-gangSTR="${PROJECT}/adam/gangstr"
+gangSTR="${PROJECT}"
  
 
 
